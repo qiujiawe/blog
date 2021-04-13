@@ -39,7 +39,8 @@ public class ArticlesServiceImpl implements ArticlesService {
             String[] arr = oldFileName.split("\\.");
             oldFileName = arr[arr.length - 1];
             newFileName = UUID.randomUUID().toString().replace("-", "") + "." + oldFileName;
-            File file = new File(Constants.IMAGE_FILE_PATH + newFileName);
+            String path = System.getProperty("user.dir") + "\\admin\\target\\classes\\static\\images\\";
+            File file = new File(path + newFileName);
             try {
                 if (file.createNewFile()) {
                     photo.transferTo(file);
@@ -266,12 +267,12 @@ public class ArticlesServiceImpl implements ArticlesService {
     }
 
     private boolean whetherChange(Blog blog) {
-        if (blog.getBlogState() == 0) {
+        if (blog.getBlogState() == Constants.BLOG_STATE_NOT_RELEASE) {
             return false;
         }
         Optional<Blog> optional = blogMapper.selectOne(c -> c.where(BlogColumnDynamicSqlSupport.id, isEqualTo(blog.getId())));
         if (optional.isPresent()) {
-            return optional.get().getBlogState() == 0;
+            return optional.get().getBlogState() == Constants.BLOG_STATE_NOT_RELEASE;
         }
         throw new UserIllegalArgumentException(HttpStatus.BAD_REQUEST, "用户修改了文章id");
     }
