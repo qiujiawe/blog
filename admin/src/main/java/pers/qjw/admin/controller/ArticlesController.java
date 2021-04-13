@@ -30,14 +30,12 @@ public class ArticlesController {
     }
 
     @GetMapping
-    @Authorization
     @ApiOperation("获取指定范围的文章")
     public ResponseEntity<List<Blog>> getArticles(String page, String number, String columnSelect, String tagsSelect) {
         return new ResponseEntity<>(articlesService.getArticles(page, number, columnSelect, tagsSelect), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    @Authorization
     @ApiOperation("获取指定id的文章")
     public ResponseEntity<Blog> getArticles(@PathVariable String id) {
         return new ResponseEntity<>(articlesService.getArticles(id), HttpStatus.OK);
@@ -49,6 +47,14 @@ public class ArticlesController {
     public ResponseEntity<String> updateArticles(MultipartFile photo, Blog blog) {
         articlesService.updateArticles(photo, blog);
         return new ResponseEntity<>("更新成功", HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    @Authorization
+    @ApiOperation("删除文章")
+    public ResponseEntity<String> deleteArticles(@PathVariable String id) {
+        articlesService.deleteArticles(id);
+        return new ResponseEntity<>("删除成功", HttpStatus.OK);
     }
 
 }

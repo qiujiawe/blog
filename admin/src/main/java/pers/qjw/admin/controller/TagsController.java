@@ -24,7 +24,6 @@ public class TagsController {
 
     @GetMapping
     @ApiOperation("获取所有标签")
-    @Authorization
     public ResponseEntity<List<Tags>> getAllTag() {
         return new ResponseEntity<>(tagsService.getAllTag(), HttpStatus.OK);
     }

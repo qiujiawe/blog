@@ -244,6 +244,21 @@ public class ArticlesServiceImpl implements ArticlesService {
                 .where(BlogColumnDynamicSqlSupport.id, isEqualTo(blog.getId())));
     }
 
+    @Override
+    public void deleteArticles(String id) {
+        checkString(id);
+        int newId;
+        try {
+            newId = Integer.parseInt(id);
+        } catch (Exception e) {
+            throw new UserIllegalArgumentException(HttpStatus.BAD_REQUEST, "错误的id");
+        }
+        int flag = blogMapper.delete(c -> c.where(BlogDynamicSqlSupport.id,isEqualTo(newId)));
+        if (flag != 1) {
+            throw new UserIllegalArgumentException(HttpStatus.BAD_REQUEST, "错误的id");
+        }
+    }
+
     private boolean whetherChange(Blog blog) {
         if (blog.getBlogState() == Constants.BLOG_STATE_NOT_RELEASE) {
             return false;

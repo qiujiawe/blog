@@ -42,7 +42,7 @@
             border-bottom: 1px solid #000;
             height: 33px;
             line-height: 33px;
-            margin-right: 80px;
+            margin-right: 153px;
         }
 
         .marginTop {
@@ -182,6 +182,7 @@
                 div.innerHTML = `    
                         <img src="${data[i].blogImg}" alt="" >
                         <button id="${data[i].id}" class="ui button right red marginTop">编辑</button>
+                        <button id="delete-${data[i].id}" class="ui button right red marginTop">删除</button>
                         <div class="borderBottom">标题:${data[i].title}</div>
                         <div class="borderBottom">文章摘要:${data[i].summary}</div>
                         <div class="borderBottom">文章标签:${data[i].tags}</div>
@@ -190,6 +191,20 @@
                 $("#list").append(div);
                 $("#" + data[i].id).click(function () {
                     location.href = "/update/" + data[i].id;
+                })
+                $("#delete-" + data[i].id).click(function () {
+                    $.ajax({
+                        headers: {
+                            "Authorization": localStorage.getItem("TOKEN")
+                        },
+                        url: "/api/articles/" + data[i].id,
+                        type: "DELETE",
+                        success: (data) => {
+                            getArticles();
+                            alert(data);
+                        },
+                        error: (data) => { alert(data.responseText); }
+                    })
                 })
             }
             if (data.length < 5) {

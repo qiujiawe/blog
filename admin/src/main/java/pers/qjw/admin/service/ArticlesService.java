@@ -13,4 +13,6 @@ public interface ArticlesService {
     Blog getArticles(String id);
 
     void updateArticles(MultipartFile photo, Blog blog);
+
+    void deleteArticles(String id);
 }

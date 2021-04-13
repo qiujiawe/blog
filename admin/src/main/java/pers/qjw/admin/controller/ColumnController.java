@@ -24,7 +24,6 @@ public class ColumnController {
 
     @GetMapping
     @ApiOperation("获取所有专栏")
-    @Authorization
     public ResponseEntity<List<BlogColumn>> getAllTag() {
         return new ResponseEntity<>(columnService.getAllBlogColumn(), HttpStatus.OK);
     }
