@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>编辑文章</title>
+    <link rel="stylesheet" type="text/css" href="/css/reset.css">
+    <link rel="stylesheet" type="text/css" href="/css/semantic.min.css">
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/semantic.min.js"></script>
+    <style>
+        #summary {
+            width: 330px;
+        }
+
+        #tags {
+            width: 300px;
+        }
+
+        #content {
+            width: 700px;
+            height: 400px;
+            resize: none;
+        }
+
+        #content::-webkit-input-placeholder {
+            color: #b3b3b3;
+            font-size: 18px;
+        }
+
+        #imgFile {
+            display: none;
+        }
+
+        .imgFile {
+            width: 50px;
+            height: 50px;
+            display: inline-block;
+        }
+
+        svg.icon {
+            cursor: pointer;
+        }
+
+        .pointer {
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="ui input">
+        <input id="title" type="text" placeholder="文章标题">
+    </div>
+    <div class="ui input">
+        <input id="summary" type="text" placeholder="文章摘要">
+    </div>
+    <div>
+        <textarea id="content" placeholder="文章内容" cols="30" rows="10"></textarea>
+    </div>
+    <div class="ui input">
+        <input id="tags" type="text" placeholder="标签(标签之间用逗号(英文逗号)隔开)">
+    </div>
+    <span>上传封面图片:</span>
+    <div class="imgFile">
+        <label for="imgFile">
+            <input type="file" id="imgFile">
+            <svg t="1618155493426" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                p-id="810">
+                <path
+                    d="M640 864 192 864c-53 0-96-43.1-96-96L96 128.1c0-53 43.1-96 96-96L832 32.1c53 0 96 43.1 96 96l0 448c0 17.7-14.3 32-32 32s-32-14.3-32-32l0-448c0-17.7-14.4-32-32-32L192 96.1c-17.7 0-32 14.4-32 32L160 768c0 17.7 14.4 32 32 32l448 0c17.7 0 32 14.3 32 32S657.7 864 640 864z"
+                    p-id="811" fill="#2c2c2c"></path>
+                <path
+                    d="M128 672c-8.2 0-16.4-3.1-22.6-9.4-12.5-12.5-12.5-32.8 0-45.3L264.8 458c29.2-29.2 73.7-36.5 110.7-18l173.6 86.8c12.3 6.2 27.1 3.8 36.8-6l287.4-287.4c12.5-12.5 32.8-12.5 45.3 0 12.5 12.5 12.5 32.8 0 45.3L631.2 566.1c-29.2 29.2-73.7 36.5-110.7 18l-173.6-86.8c-12.3-6.2-27.1-3.8-36.8 6L150.6 662.6C144.4 668.9 136.2 672 128 672z"
+                    p-id="812" fill="#2c2c2c"></path>
+                <path
+                    d="M384 352c-52.9 0-96-43.1-96-96s43.1-96 96-96 96 43.1 96 96S436.9 352 384 352zM384 224c-17.6 0-32 14.4-32 32s14.4 32 32 32 32-14.4 32-32S401.6 224 384 224z"
+                    p-id="813" fill="#2c2c2c"></path>
+                <path
+                    d="M768 864c-17.7 0-32-14.3-32-32L736 640c0-17.7 14.3-32 32-32s32 14.3 32 32l0 192C800 849.7 785.7 864 768 864z"
+                    p-id="814" fill="#2c2c2c"></path>
+                <path
+                    d="M896 736c-7.9 0-15.7-2.9-21.9-8.7L768 627.7l-106.1 99.7c-12.9 12.1-33.1 11.5-45.2-1.4-12.1-12.9-11.5-33.1 1.4-45.2l112.2-105.4c9.2-11.3 23-17.9 37.7-17.9s28.5 6.6 37.7 17.9l112.2 105.4c12.9 12.1 13.5 32.4 1.4 45.2C913 732.6 904.5 736 896 736z"
+                    p-id="815" fill="#2c2c2c"></path>
+            </svg>
+        </label>
+    </div>
+    <div class="ui input">
+        <input id="column" type="text" placeholder="专栏">
+    </div>
+    <div class="ui checkbox">
+        <input type="checkbox" name="reprint" id="reprint">
+        <label class="pointer" for="reprint">
+            <span class="pointer">转载</span>
+        </label>
+    </div>
+    <div class="ui checkbox">
+        <input type="checkbox" name="recommend" id="recommend">
+        <label for="recommend">
+            <span class="pointer">推荐</span>
+        </label>
+    </div>
+    <div class="ui checkbox">
+        <input type="checkbox" name="admire" id="admire">
+        <label for="admire">
+            <span class="pointer">欣赏</span>
+        </label>
+    </div>
+    <button id="save_article" class="ui button">下架/保存</button>
+    <button id="up_article" class="ui button">发布</button>
+
+    <script>
+        $.ajax({
+            headers: {
+                "Authorization": localStorage.getItem("TOKEN")
+            },
+            url: "/api/currentUser/state",
+            type: "GET",
+            success: function (data) {
+                if (!data) {
+                    location.href = "/login";
+                }
+            },
+            error: function (data) {
+                alert(data.responseText);
+            }
+        })
+        let url = window.location.href;
+        let arr = url.split("/");
+        let id = arr[arr.length - 1];
+        let img;
+        $.ajax({
+            headers: {
+                "Authorization": localStorage.getItem("TOKEN")
+            },
+            url: "/api/articles/" + id,
+            type: "GET",
+            success: function (data) {
+                $("#title")[0].value = data.title;
+                $("#summary")[0].value = data.summary;
+                $("#content")[0].value = data.content;
+                $("#tags")[0].value = data.tags;
+                $("#column")[0].value = data.blogColumn;
+                if (data.reprintState === 1) {
+                    $("#reprint")[0].checked = true;
+                } else {
+                    $("#reprint")[0].checked = false;
+                }
+                if (data.recommendState === 1) {
+                    $("#recommend")[0].checked = true;
+                } else {
+                    $("#recommend")[0].checked = false;
+                }
+                if (data.admireState === 1) {
+                    $("#admire")[0].checked = true;
+                } else {
+                    $("#admire")[0].checked = false;
+                }
+                img = data.blogImg;
+            },
+            error: function (data) {
+                alert(data.responseText);
+            }
+        })
+        
+        function up(blogState) {
+            let reprint, recommend,admire;
+            if ($("#reprint").is(':checked')) {
+                reprint = 1;
+            } else {
+                reprint = 0;
+            }
+            if ($("#recommend").is(':checked')) {
+                recommend = 1;
+            } else {
+                recommend = 0;
+            }
+            if ($("#admire").is(':checked')) {
+                admire = 1;
+            } else {
+                admire = 0;
+            }
+            let formData = new FormData();
+            formData.append('photo', $("#imgFile")[0].files[0]);
+            formData.append('title', $("#title")[0].value);
+            formData.append('summary', $("#summary")[0].value);
+            formData.append('content', $("#content")[0].value);
+            formData.append('tags', $("#tags")[0].value);
+            formData.append('blogColumn', $("#column")[0].value);
+            formData.append('reprintState', reprint);
+            formData.append('recommendState', recommend);
+            formData.append('admireState', admire);
+            formData.append('blogState', blogState);
+            formData.append('id', parseInt(id));
+            formData.append('blogImg', img);
+            $.ajax({
+                headers: {
+                    "Authorization": localStorage.getItem("TOKEN")
+                },
+                url: "/api/articles",
+                type: "PUT",
+                processData: false,
+                contentType: false,
+                data: formData,
+                success: function (data) {
+                    alert(data);
+                },
+                error: function (data) {
+                    alert(data.responseText);
+                }
+            })
+
+        }
+
+        $("#save_article").click(function(){
+            up(0);
+        });
+        $("#up_article").click(function(){
+            up(1);
+        });
+    </script>
+
+</body>
+
+</html>

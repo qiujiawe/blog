@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理</title>
+    <link rel="stylesheet" type="text/css" href="/css/reset.css">
+    <link rel="stylesheet" type="text/css" href="/css/semantic.min.css">
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/semantic.min.js"></script>
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+
+        td {
+            border: 1px solid #000;
+        }
+
+        .img {
+            width: 100px;
+        }
+
+        .right {
+            float: right;
+        }
+
+        .list {
+            height: 100px;
+            border: 1px solid #000;
+            margin-right: 300px;
+        }
+
+        .list>img {
+            height: 100%;
+            float: left;
+        }
+
+        .borderBottom {
+            border-bottom: 1px solid #000;
+            height: 33px;
+            line-height: 33px;
+            margin-right: 80px;
+        }
+
+        .marginTop {
+            margin-top: 33px !important;
+        }
+
+        .position {
+            position: absolute;
+            left: 0;
+            right: 0;
+            margin: 0 auto;
+            top: 0px;
+            width: 50px;
+            background-color: #000;
+            color: #fff;
+        }
+
+        .relative {
+            position: relative;
+        }
+    </style>
+</head>
+
+<body>
+    <div>条件筛选</div>
+    <span>专栏:</span>
+    <select class="ui dropdown" id="columnSelect">
+        <option value="null">无</option>
+    </select>
+    <span>标签:</span>
+    <select class="ui dropdown" id="tagsSelect">
+        <option value="null">无</option>
+    </select>
+    <button id="screening" class="ui primary button">
+        筛选
+    </button>
+
+    <div class="user-info right"></div>
+    <button id="editor" class="ui primary button right marginTop">
+        新建文章
+    </button>
+    <button id="logout" class="ui inverted red button right marginTop">
+        <font style="vertical-align: inherit;">
+            <font style="vertical-align: inherit;">登出</font>
+        </font>
+    </button>
+    <div id="list"></div>
+    <button class="ui button" id="previousPage">上一页</button>
+    <span id="page">1</span>
+    <button class="ui button" id="nextPage">下一页</button>
+    <script>
+        // 检查是否登录
+        $.ajax({
+            headers: {
+                "Authorization": localStorage.getItem("TOKEN")
+            },
+            url: "/api/currentUser/state",
+            type: "GET",
+            success: function (data) {
+                if (!data) {
+                    location.href = "/login";
+                }
+            }
+        })
+        // 获取所有标签
+        $.ajax({
+            headers: {
+                "Authorization": localStorage.getItem("TOKEN")
+            },
+            url: "/api/tags",
+            type: "GET",
+            success: function (data) {
+                for (let i = 0; i < data.length; i++) {
+                    let option = document.createElement("option");
+                    option.value = data[i].name;
+                    option.innerHTML = data[i].name;
+                    $("#tagsSelect").append(option);
+                }
+            }
+        })
+        // 获取所有专栏
+        $.ajax({
+            headers: {
+                "Authorization": localStorage.getItem("TOKEN")
+            },
+            url: "/api/columns",
+            type: "GET",
+            success: function (data) {
+                for (let i = 0; i < data.length; i++) {
+                    let option = document.createElement("option");
+                    option.value = data[i].name;
+                    option.innerHTML = data[i].name;
+                    $("#columnSelect").append(option);
+                }
+            }
+        })
+        // 登出
+        $("#logout").click(function () {
+            localStorage.removeItem("TOKEN");
+            location.href = "/";
+        })
+        // 获取用户信息
+        $.ajax({
+            headers: {
+                "Authorization": localStorage.getItem("TOKEN")
+            },
+            url: "/api/currentUser",
+            type: "GET",
+            success: function (data) {
+                let div = document.createElement("div");
+                div.innerHTML = `
+                    <span><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">${data.name}</font></font></span>
+                    <img class="tiny ui avatar image" src="${data.icon}">
+                `;
+                $(".user-info").append(div);
+            },
+            error: function (data) {
+                console.log(data.responseText);
+            }
+        })
+        // 前往新建文章页面
+        $("#editor").click(function () {
+            location.href = "/editor"
+        })
+        // 讲ajax请求的文章数据展示到页面上
+        function createList(data) {
+            for (let i = 0; i < data.length; i++) {
+                let blogState;
+                if (data[i].blogState === 0) {
+                    blogState = "未发布";
+                } else if (data[i].blogState === 1) {
+                    blogState = "已发布";
+                }
+                let div = document.createElement("div");
+                div.classList.add("list");
+                div.classList.add("relative");
+                div.innerHTML = `    
+                        <img src="${data[i].blogImg}" alt="" >
+                        <button id="${data[i].id}" class="ui button right red marginTop">编辑</button>
+                        <div class="borderBottom">标题:${data[i].title}</div>
+                        <div class="borderBottom">文章摘要:${data[i].summary}</div>
+                        <div class="borderBottom">文章标签:${data[i].tags}</div>
+                        <div class="position">${blogState}<div>
+                    `;
+                $("#list").append(div);
+                $("#" + data[i].id).click(function () {
+                    location.href = "/update/" + data[i].id;
+                })
+            }
+            if (data.length < 5) {
+                let div = document.createElement("div");
+                div.innerHTML = `<span>没有了~</span>`;
+                $("#list").append(div);
+            }
+        }
+        // 记录当前 页码，作为发送ajax的请求参数
+        let page = 1;
+        // 获取所有文章的ajax请求方法
+        function getArticles() {
+            let columnSelect = $("#columnSelect")[0],
+                tagsSelect = $("#tagsSelect")[0];
+            if (columnSelect.value === "null") {
+                columnSelect = null;
+            } else {
+                columnSelect = columnSelect.value;
+            }
+            if (tagsSelect.value === "null") {
+                tagsSelect = null;
+            } else {
+                tagsSelect = tagsSelect.value;
+            }
+            $.ajax({
+                headers: {
+                    "Authorization": localStorage.getItem("TOKEN")
+                },
+                url: "/api/articles",
+                type: "GET",
+                data: {
+                    page: page,
+                    number: 5,
+                    columnSelect: columnSelect,
+                    tagsSelect: tagsSelect
+                },
+                success: function (data) {
+                    if (data.length < 1) {
+                        if (page > 1) {
+                            page--;
+                        }
+                        $("#page")[0].innerHTML = page;
+                        alert("没有了~");
+                        return;
+                    } else {
+                        $("#list")[0].innerHTML = ``;
+                    }
+                    createList(data);
+                },
+                error: function (data) {
+                    console.log(data.responseText);
+                }
+            })
+        }
+        // 执行 获取所有文章的ajax请求方法 
+        getArticles();
+        // 更新页码 和文章数据
+        $("#previousPage").click(function () {
+            if (page <= 1) {
+                alert("没有上一页了");
+                return;
+            }
+            page--;
+            $("#page")[0].innerHTML = page;
+            getArticles();
+        })
+        $("#nextPage").click(function () {
+            page++;
+            $("#page")[0].innerHTML = page;
+            getArticles();
+        })
+        $("#screening").click(function () {
+            getArticles();
+        })
+    </script>
+</body>
+
+</html>
