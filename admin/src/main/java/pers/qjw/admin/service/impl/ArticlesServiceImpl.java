@@ -20,6 +20,7 @@ import java.io.File;
 import java.util.*;
 
 import static org.mybatis.dynamic.sql.SqlBuilder.isEqualTo;
+import static org.mybatis.dynamic.sql.SqlBuilder.isLike;
 
 @Service
 @AllArgsConstructor
@@ -163,16 +164,6 @@ public class ArticlesServiceImpl implements ArticlesService {
         checkTags(blog.getTags());
     }
 
-    private boolean containsTag(Blog blog,String tagName){
-        String[] tagArr = blog.getTags().split(",");
-        for (String temp : tagArr) {
-            if (Objects.equals(temp,tagName)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
     @Override
     // 获取指定范围内的所有文章
     public List<Blog> getArticles(String page, String number, String columnSelect, String tagsSelect) {
@@ -182,34 +173,21 @@ public class ArticlesServiceImpl implements ArticlesService {
         if (Strings.isNullOrEmpty(columnSelect) && Strings.isNullOrEmpty(tagsSelect)) {
             // 没有条件筛选
             list = blogMapper.select(c -> c);
-            PageInfo<Blog> pageInfo = new PageInfo<>(list);
-            list = pageInfo.getList();
         } else if (!Strings.isNullOrEmpty(columnSelect) && !Strings.isNullOrEmpty(tagsSelect)) {
             // 专栏 和 标签 双重筛选
             list = blogMapper.select(c -> c
                     .where(BlogDynamicSqlSupport.blogColumn, isEqualTo(columnSelect))
-            );
-            PageInfo<Blog> pageInfo = new PageInfo<>(list);
-            list = pageInfo.getList();
-            list.removeIf(temp -> containsTag(temp, tagsSelect));
+                    .and(BlogDynamicSqlSupport.tags, isLike("%" + tagsSelect + "%")));
         } else if (!Strings.isNullOrEmpty(columnSelect)) {
             // 仅对 专栏 进行了筛选
             list = blogMapper.select(c -> c
                     .where(BlogDynamicSqlSupport.blogColumn, isEqualTo(columnSelect)));
-            PageInfo<Blog> pageInfo = new PageInfo<>(list);
-            list = pageInfo.getList();
         } else {
             // 仅对 标签 进行了筛选
-            list = blogMapper.select(c -> c);
-            PageInfo<Blog> pageInfo = new PageInfo<>(list);
-            list = pageInfo.getList();
-            list.removeIf(temp -> containsTag(temp, tagsSelect));
+            list = blogMapper.select(c -> c.where(BlogDynamicSqlSupport.tags, isLike("%" + tagsSelect + "%")));
         }
-        if (!Objects.isNull(list)) {
-            return list;
-        } else {
-            return null;
-        }
+        PageInfo<Blog> pageInfo = new PageInfo<>(list);
+        return pageInfo.getList();
     }
 
     @Override
