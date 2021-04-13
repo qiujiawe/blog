@@ -8,6 +8,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class MvcConfig implements WebMvcConfigurer {
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
+        // 莫名其妙的警告
         registry.addViewController("/login").setViewName("/page/login.html");
         registry.addViewController("/admin").setViewName("/page/admin.html");
         registry.addViewController("/editor").setViewName("/page/editor.html");
