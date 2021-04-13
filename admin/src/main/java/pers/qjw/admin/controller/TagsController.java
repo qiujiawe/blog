@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import pers.qjw.admin.annotations.Authorization;
 import pers.qjw.admin.model.Tags;
 import pers.qjw.admin.service.TagsService;
 
@@ -23,6 +24,7 @@ public class TagsController {
 
     @GetMapping
     @ApiOperation("获取所有标签")
+    @Authorization
     public ResponseEntity<List<Tags>> getAllTag() {
         return new ResponseEntity<>(tagsService.getAllTag(), HttpStatus.OK);
     }

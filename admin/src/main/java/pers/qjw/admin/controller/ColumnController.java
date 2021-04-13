@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import pers.qjw.admin.annotations.Authorization;
 import pers.qjw.admin.model.BlogColumn;
 import pers.qjw.admin.service.ColumnService;
 
@@ -23,6 +24,7 @@ public class ColumnController {
 
     @GetMapping
     @ApiOperation("获取所有专栏")
+    @Authorization
     public ResponseEntity<List<BlogColumn>> getAllTag() {
         return new ResponseEntity<>(columnService.getAllBlogColumn(), HttpStatus.OK);
     }
