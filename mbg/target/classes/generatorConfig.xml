@@ -26,7 +26,6 @@
 
         <table tableName="blog"/>
 <!--        <table tableName="blog_column"/>-->
-<!--        <table tableName="comment"/>-->
 <!--        <table tableName="tags"/>-->
 <!--        <table tableName="blog_user"/>-->
 

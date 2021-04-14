@@ -1,8 +1,8 @@
 package pers.qjw.admin.model;
 
-import javax.annotation.Generated;
 import java.io.Serializable;
 import java.util.Date;
+import javax.annotation.Generated;
 
 public class Blog implements Serializable {
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
@@ -27,9 +27,6 @@ public class Blog implements Serializable {
     private String tags;
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
-    private String comments;
-
-    @Generated("org.mybatis.generator.api.MyBatisGenerator")
     private String blogImg;
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
@@ -37,9 +34,6 @@ public class Blog implements Serializable {
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
     private Byte admireState;
-
-    @Generated("org.mybatis.generator.api.MyBatisGenerator")
-    private Byte commentState;
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
     private Byte recommendState;
@@ -127,16 +121,6 @@ public class Blog implements Serializable {
     }
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
-    public String getComments() {
-        return comments;
-    }
-
-    @Generated("org.mybatis.generator.api.MyBatisGenerator")
-    public void setComments(String comments) {
-        this.comments = comments;
-    }
-
-    @Generated("org.mybatis.generator.api.MyBatisGenerator")
     public String getBlogImg() {
         return blogImg;
     }
@@ -164,16 +148,6 @@ public class Blog implements Serializable {
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
     public void setAdmireState(Byte admireState) {
         this.admireState = admireState;
-    }
-
-    @Generated("org.mybatis.generator.api.MyBatisGenerator")
-    public Byte getCommentState() {
-        return commentState;
-    }
-
-    @Generated("org.mybatis.generator.api.MyBatisGenerator")
-    public void setCommentState(Byte commentState) {
-        this.commentState = commentState;
     }
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
@@ -230,11 +204,9 @@ public class Blog implements Serializable {
         sb.append(", blogColumn=").append(blogColumn);
         sb.append(", views=").append(views);
         sb.append(", tags=").append(tags);
-        sb.append(", comments=").append(comments);
         sb.append(", blogImg=").append(blogImg);
         sb.append(", blogState=").append(blogState);
         sb.append(", admireState=").append(admireState);
-        sb.append(", commentState=").append(commentState);
         sb.append(", recommendState=").append(recommendState);
         sb.append(", reprintState=").append(reprintState);
         sb.append(", createTime=").append(createTime);

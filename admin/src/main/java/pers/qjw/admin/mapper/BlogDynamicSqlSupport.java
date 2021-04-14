@@ -32,9 +32,6 @@ public final class BlogDynamicSqlSupport {
     public static final SqlColumn<String> tags = blog.tags;
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
-    public static final SqlColumn<String> comments = blog.comments;
-
-    @Generated("org.mybatis.generator.api.MyBatisGenerator")
     public static final SqlColumn<String> blogImg = blog.blogImg;
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
@@ -42,9 +39,6 @@ public final class BlogDynamicSqlSupport {
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
     public static final SqlColumn<Byte> admireState = blog.admireState;
-
-    @Generated("org.mybatis.generator.api.MyBatisGenerator")
-    public static final SqlColumn<Byte> commentState = blog.commentState;
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
     public static final SqlColumn<Byte> recommendState = blog.recommendState;
@@ -74,15 +68,11 @@ public final class BlogDynamicSqlSupport {
 
         public final SqlColumn<String> tags = column("tags", JDBCType.VARCHAR);
 
-        public final SqlColumn<String> comments = column("comments", JDBCType.VARCHAR);
-
         public final SqlColumn<String> blogImg = column("blog_img", JDBCType.VARCHAR);
 
         public final SqlColumn<Byte> blogState = column("blog_state", JDBCType.TINYINT);
 
         public final SqlColumn<Byte> admireState = column("admire_state", JDBCType.TINYINT);
-
-        public final SqlColumn<Byte> commentState = column("comment_state", JDBCType.TINYINT);
 
         public final SqlColumn<Byte> recommendState = column("recommend_state", JDBCType.TINYINT);
 

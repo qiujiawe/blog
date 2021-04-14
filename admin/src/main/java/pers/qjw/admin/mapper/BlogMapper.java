@@ -35,7 +35,7 @@ import pers.qjw.admin.model.Blog;
 @Mapper
 public interface BlogMapper {
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
-    BasicColumn[] selectList = BasicColumn.columnList(id, title, summary, publishDate, blogColumn, views, tags, comments, blogImg, blogState, admireState, commentState, recommendState, reprintState, createTime, content);
+    BasicColumn[] selectList = BasicColumn.columnList(id, title, summary, publishDate, blogColumn, views, tags, blogImg, blogState, admireState, recommendState, reprintState, createTime, content);
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
     @SelectProvider(type=SqlProviderAdapter.class, method="select")
@@ -68,11 +68,9 @@ public interface BlogMapper {
         @Result(column="blog_column", property="blogColumn", jdbcType=JdbcType.VARCHAR),
         @Result(column="views", property="views", jdbcType=JdbcType.INTEGER),
         @Result(column="tags", property="tags", jdbcType=JdbcType.VARCHAR),
-        @Result(column="comments", property="comments", jdbcType=JdbcType.VARCHAR),
         @Result(column="blog_img", property="blogImg", jdbcType=JdbcType.VARCHAR),
         @Result(column="blog_state", property="blogState", jdbcType=JdbcType.TINYINT),
         @Result(column="admire_state", property="admireState", jdbcType=JdbcType.TINYINT),
-        @Result(column="comment_state", property="commentState", jdbcType=JdbcType.TINYINT),
         @Result(column="recommend_state", property="recommendState", jdbcType=JdbcType.TINYINT),
         @Result(column="reprint_state", property="reprintState", jdbcType=JdbcType.TINYINT),
         @Result(column="create_time", property="createTime", jdbcType=JdbcType.TIMESTAMP),
@@ -111,11 +109,9 @@ public interface BlogMapper {
             .map(blogColumn).toProperty("blogColumn")
             .map(views).toProperty("views")
             .map(tags).toProperty("tags")
-            .map(comments).toProperty("comments")
             .map(blogImg).toProperty("blogImg")
             .map(blogState).toProperty("blogState")
             .map(admireState).toProperty("admireState")
-            .map(commentState).toProperty("commentState")
             .map(recommendState).toProperty("recommendState")
             .map(reprintState).toProperty("reprintState")
             .map(createTime).toProperty("createTime")
@@ -133,11 +129,9 @@ public interface BlogMapper {
             .map(blogColumn).toProperty("blogColumn")
             .map(views).toProperty("views")
             .map(tags).toProperty("tags")
-            .map(comments).toProperty("comments")
             .map(blogImg).toProperty("blogImg")
             .map(blogState).toProperty("blogState")
             .map(admireState).toProperty("admireState")
-            .map(commentState).toProperty("commentState")
             .map(recommendState).toProperty("recommendState")
             .map(reprintState).toProperty("reprintState")
             .map(createTime).toProperty("createTime")
@@ -155,11 +149,9 @@ public interface BlogMapper {
             .map(blogColumn).toPropertyWhenPresent("blogColumn", record::getBlogColumn)
             .map(views).toPropertyWhenPresent("views", record::getViews)
             .map(tags).toPropertyWhenPresent("tags", record::getTags)
-            .map(comments).toPropertyWhenPresent("comments", record::getComments)
             .map(blogImg).toPropertyWhenPresent("blogImg", record::getBlogImg)
             .map(blogState).toPropertyWhenPresent("blogState", record::getBlogState)
             .map(admireState).toPropertyWhenPresent("admireState", record::getAdmireState)
-            .map(commentState).toPropertyWhenPresent("commentState", record::getCommentState)
             .map(recommendState).toPropertyWhenPresent("recommendState", record::getRecommendState)
             .map(reprintState).toPropertyWhenPresent("reprintState", record::getReprintState)
             .map(createTime).toPropertyWhenPresent("createTime", record::getCreateTime)
@@ -203,11 +195,9 @@ public interface BlogMapper {
                 .set(blogColumn).equalTo(record::getBlogColumn)
                 .set(views).equalTo(record::getViews)
                 .set(tags).equalTo(record::getTags)
-                .set(comments).equalTo(record::getComments)
                 .set(blogImg).equalTo(record::getBlogImg)
                 .set(blogState).equalTo(record::getBlogState)
                 .set(admireState).equalTo(record::getAdmireState)
-                .set(commentState).equalTo(record::getCommentState)
                 .set(recommendState).equalTo(record::getRecommendState)
                 .set(reprintState).equalTo(record::getReprintState)
                 .set(createTime).equalTo(record::getCreateTime)
@@ -223,11 +213,9 @@ public interface BlogMapper {
                 .set(blogColumn).equalToWhenPresent(record::getBlogColumn)
                 .set(views).equalToWhenPresent(record::getViews)
                 .set(tags).equalToWhenPresent(record::getTags)
-                .set(comments).equalToWhenPresent(record::getComments)
                 .set(blogImg).equalToWhenPresent(record::getBlogImg)
                 .set(blogState).equalToWhenPresent(record::getBlogState)
                 .set(admireState).equalToWhenPresent(record::getAdmireState)
-                .set(commentState).equalToWhenPresent(record::getCommentState)
                 .set(recommendState).equalToWhenPresent(record::getRecommendState)
                 .set(reprintState).equalToWhenPresent(record::getReprintState)
                 .set(createTime).equalToWhenPresent(record::getCreateTime)
@@ -243,11 +231,9 @@ public interface BlogMapper {
             .set(blogColumn).equalTo(record::getBlogColumn)
             .set(views).equalTo(record::getViews)
             .set(tags).equalTo(record::getTags)
-            .set(comments).equalTo(record::getComments)
             .set(blogImg).equalTo(record::getBlogImg)
             .set(blogState).equalTo(record::getBlogState)
             .set(admireState).equalTo(record::getAdmireState)
-            .set(commentState).equalTo(record::getCommentState)
             .set(recommendState).equalTo(record::getRecommendState)
             .set(reprintState).equalTo(record::getReprintState)
             .set(createTime).equalTo(record::getCreateTime)
@@ -265,11 +251,9 @@ public interface BlogMapper {
             .set(blogColumn).equalToWhenPresent(record::getBlogColumn)
             .set(views).equalToWhenPresent(record::getViews)
             .set(tags).equalToWhenPresent(record::getTags)
-            .set(comments).equalToWhenPresent(record::getComments)
             .set(blogImg).equalToWhenPresent(record::getBlogImg)
             .set(blogState).equalToWhenPresent(record::getBlogState)
             .set(admireState).equalToWhenPresent(record::getAdmireState)
-            .set(commentState).equalToWhenPresent(record::getCommentState)
             .set(recommendState).equalToWhenPresent(record::getRecommendState)
             .set(reprintState).equalToWhenPresent(record::getReprintState)
             .set(createTime).equalToWhenPresent(record::getCreateTime)

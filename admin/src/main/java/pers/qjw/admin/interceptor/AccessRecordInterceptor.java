@@ -49,6 +49,9 @@ public class AccessRecordInterceptor implements HandlerInterceptor {
                 if (optional.isPresent()) {
                     Blog blog = optional.get();
                     // 更新数据
+                    if (Objects.isNull(blog.getViews())) {
+                        blog.setViews(0);
+                    }
                     blogMapper.update(c -> c.set(BlogDynamicSqlSupport.views).equalTo(blog.getViews() + 1)
                             .where(BlogDynamicSqlSupport.id, isEqualTo(id)));
                 } else {
