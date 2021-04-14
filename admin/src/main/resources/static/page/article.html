@@ -86,9 +86,6 @@
         let arr = url.split("/");
         let id = arr[arr.length - 1];
         $.ajax({
-            headers: {
-                "Authorization": localStorage.getItem("TOKEN")
-            },
             url: "/api/articles/" + id,
             type: "GET",
             success: function (data) {
