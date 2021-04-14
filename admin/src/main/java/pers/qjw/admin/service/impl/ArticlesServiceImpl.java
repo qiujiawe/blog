@@ -40,7 +40,7 @@ public class ArticlesServiceImpl implements ArticlesService {
             String[] arr = oldFileName.split("\\.");
             oldFileName = arr[arr.length - 1];
             newFileName = UUID.randomUUID().toString().replace("-", "") + "." + oldFileName;
-            String path = System.getProperty("user.dir") + "\\images\\";
+            String path = System.getProperty("user.dir") + "/images/";
             File file = new File(path + newFileName);
             try {
                 if (file.createNewFile()) {
